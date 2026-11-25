@@ -70,6 +70,12 @@ opt-level = 2
 
 [profile.release]
 debug = "line-tables-only"
+# Cross-crate inlining helps the CPU-heavy emulator and shader translation
+# paths without changing GPU rendering semantics. Thin LTO is less costly
+# to compile than full LTO.
+lto = "thin"
+# Keep some parallel code generation to avoid excessive build-time memory.
+codegen-units = 4
 
 # The development build: release code generation plus the `diagnostics`
 # feature (`cargo build --profile diag -p victory --features diagnostics`),
