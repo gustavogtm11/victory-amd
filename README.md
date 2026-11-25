@@ -176,6 +176,38 @@ Requirements: Windows 10/11 x64, a CPU with AVX2, a Direct3D 12 GPU with
 shader model 6.6 (and mesh shaders for the world), Rust (pinned in
 `rust-toolchain.toml`).
 
+### Windows x64 package and performance launcher
+
+Every push to `main` builds a release executable and publishes the
+`victory-windows-x64` artifact in the repository's GitHub Actions run.
+Download and extract that artifact; it contains `victory.exe`,
+`run-optimized.ps1`, this README and `victory.example.toml`.
+
+From PowerShell in the extracted folder, launch your own game executable:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\run-optimized.ps1 "D:\Games\YourGame\Game.exe"
+```
+
+The default `performance` mode enables the fork's measured asynchronous
+submission/relay path and parallel copy-back. Its card-buffer budget is capped
+at 512 MiB for GPUs with 8 GiB VRAM. If the driver hangs, the image corrupts,
+or the game becomes unstable, use the conservative path:
+
+```powershell
+.\run-optimized.ps1 "D:\Games\YourGame\Game.exe" -Mode stable
+```
+
+These are runtime presets, not a claim that the title is fully playable.
+The fork's latest documented gameplay tests still report very low frame rates,
+missing ray-traced lighting and occasional missing room geometry. The measured
+performance figures were obtained on a different, faster PC and are not an FPS
+promise for an RTX 2060 SUPER. The game has also used about 24 GB of memory in
+a gameplay run; with 16 GB of physical RAM, Windows may need a sufficiently
+large system-managed paging file and free disk space. The launcher cannot
+supply missing emulator features or game data.
+
 The title also needs several GiB of available Windows commit at startup.
 Check **Committed** under **Task Manager → Performance → Memory**. If
 `crashes.log` reports Windows error 1455, close other applications or increase
